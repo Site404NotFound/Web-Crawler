@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="container">
+
+
+
+  <!-- Load validate.js script into memory -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
+
+  <div class="jumbotron">
+    <h1>Search Parameters</h1>
+
+    <!-- Print welcome back message if they have used before -->
+    {% if url_list %}
+      <p>Welcome back! Your previously crawled URL's can be found in the dropdown below:</p>
+    {% endif %}
+    <hr class="my-4">
+    <p class="lead">
+
+    <!-- Print error message if warning has been flashed -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <!-- Print error message(s) -->
+    {% for message in messages %}
+      <small id="inputError" class="form-text has-warning" style="'color':red;">{{ message }}</small>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form class="form-horizontal" action="/search" class="search" method="POST">
+
+      <!-- Starting_url input -->
+      <div class="form-group">
+        <!-- Render dropdown/text entry with previous urls if cookie is set -->
+        {% if url_list %}
+          <label for="starting_url">Starting URL:</label>
+          <!-- Add http:// to input group addon -->
+
+          <div class="input-group mb-3">
+
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="urlAddOn">http://</span>
+            </div>
+
+            <input class="form-control" placeholder="www.example.com" id="starting_url" name="starting_url" type="text" list="url_list" aria-describedby="urlAddOn" required>
+            <datalist id="url_list">
+              {% for url in url_list %}
+                <option value="{{ url }}"></option>
+              {% endfor %}
+          </div>
+
+
+          </datalist>
+
+        <!-- Else, if no cookie is set, render a normal text input field -->
+        {% else %}
+          <label for="starting_url">Starting URL:</label>
+
+          <div class="input-group mb-3">
+
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="urlAddOn">http://</span>
+            </div>
+
+            <input class="form-control" placeholder="www.example.com" id="starting_url" required type="text" name="starting_url" aria-describedby="urlAddOn" value>
+          </div>
+
+        {% endif %}
+      </div>
+
+      <!-- Radio input for method -->
+      <div class="form-group">
+        <input id="method-0" name="method" type="radio"  value="breadth" checked="checked" required>
+        <label for="method-0">Breadth First</label>
+        <input id="method-1" name="method" type="radio"  value="depth">
+        <label for="method-1">Depth First</label>
+      </div>
+
+      <!-- Numerical input for depth -->
+      <div class="form-group">
+        <label for="depth">Search Depth:</label>
+        <input id="depth" name="depth" required type="number" size="3" min="1" max="3" value>
+        <small id="depthHelp" class="form-text text-muted">Max depth for breadth first traversal is 3 steps</small>
+      </div>
+
+      <!-- Text input for optional keyword -->
+      <div class="form-group">
+        <label for="keyword">Keyword (optional):</label>
+        <input class="form-control" id="keyword" name="keyword" type="text" value>
+      </div>
+
+      <!-- Submit button -->
+      <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+  </div>
+
+  <!-- search.js script -->
+  <script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+</div>
+{% endblock %}

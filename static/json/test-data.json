@@ -1,0 +1,11 @@
+{
+  "nodes": {
+    "Google": {"url": "https://www.google.com", "keyword": "keyword"},
+    "Link 1": {"url": "http://www.thisisapage.com"},
+    "Link 2": {"url": "http://www.thisisapage2.com"},
+    "Link 3": {"url": "http://www.thisisapage3.com"}
+  },
+  "edges": {
+    "Google": {"Link 1": {}, "Link 2":{}, "Link 3":{}}
+  }
+}
